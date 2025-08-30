@@ -764,14 +764,16 @@
                     throw new Error('Server error');
                 }
 
+                // YANGI KOD: Backend'dan javobni olamiz
+                const responseData = await response.json();
+                const voucherCode = responseData.voucher;
+                
                 submitBtn.innerHTML = successTexts[currentLang];
                 
-                // Generate unique voucher code
-                const voucherCode = `MATH2024-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+                // Backend'dan kelgan voucher kodini ko'rsatamiz
                 document.getElementById('voucherCode').textContent = voucherCode;
 
                 setTimeout(() => {
-                    // Show thank you page
                     document.getElementById('mainContent').style.display = 'none';
                     document.getElementById('thankYouPage').style.display = 'block';
                     window.scrollTo(0, 0);
@@ -793,7 +795,6 @@
                 }, 2000);
             }
         }
-
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
