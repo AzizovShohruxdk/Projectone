@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathCenter - Matematik Kurslar Markazi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .language-selector {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 25px;
+            padding: 8px 20px;
+            color: #667eea;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .language-selector:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            color: white;
+            margin-bottom: 30px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ffd93d, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Banner/Carousel Section */
+        .banners {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .banner-slider {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .banner {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 60px;
+            padding: 80px 60px;
+            min-height: 500px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .banner.active {
+            display: grid;
+        }
+
+        .banner-content h2 {
+            font-size: 2.5em;
+            margin-bottom: 25px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .banner-content p {
+            font-size: 1.2em;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .banner-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        .banner-image img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.5s ease;
+        }
+
+        .banner-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .banner-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+
+        /* Banner Styles */
+        .banner1 {
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+        }
+
+        .banner2 {
+            background: linear-gradient(135deg, #ff6b6b20, #ffd93d20);
+        }
+
+        .banner3 {
+            background: linear-gradient(135deg, #4ecdc420, #44a08d20);
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+            animation: slideInUp 1s ease-out;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 18px 25px;
+            border: 2px solid #e8e8e8;
+            border-radius: 15px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Thank You Page */
+        .thank-you-page {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 120px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .thank-you-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .thank-you-page h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        .voucher {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        .voucher-code {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+            border-radius: 15px;
+            border: 2px dashed #667eea;
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .telegram-btn:hover {
+            background: #006ba3;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 136, 204, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(80px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounceIn {
+            from { opacity: 0; transform: scale(0.5); }
+            60% { transform: scale(1.05); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 15px;
+            }
+
+            .logo-text {
+                font-size: 16px;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            .banner {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 40px 30px;
+                gap: 40px;
+            }
+
+            .banner-content h2 {
+                font-size: 2em;
+            }
+
+            .form-container {
+                padding: 30px;
+                margin: 0 15px;
+            }
+
+            .thank-you-page h1 {
+                font-size: 2.2em;
+            }
+
+            .voucher {
+                padding: 25px;
+                margin: 20px 0;
+            }
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles">
+        <div class="particle" style="width: 50px; height: 50px; top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="width: 30px; height: 30px; top: 60%; left: 80%; animation-delay: 2s;"></div>
+        <div class="particle" style="width: 40px; height: 40px; top: 80%; left: 20%; animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">∑</div>
+            <div class="logo-text" data-uz="MathCenter" data-ru="МатЦентр" data-en="MathCenter">MathCenter</div>
+        </div>
+        <div class="language-selector" onclick="toggleLanguage()">
+            <span id="langFlag">🇺🇿</span>
+            <span id="langText">O'zbek</span>
+            <span>▼</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>
+                    <span class="highlight" data-uz="MATEMATIK" data-ru="МАТЕМАТИКА" data-en="MATHEMATICS">MATEMATIK</span><br>
+                    <span data-uz="KURSLARIGA" data-ru="КУРСАМ" data-en="COURSES">KURSLARIGA</span><br>
+                    <span data-uz="YOZILISHNI" data-ru="ЗАПИСАТЬСЯ" data-en="ENROLLMENT">YOZILISHNI</span><br>
+                    <span class="highlight" data-uz="ISTAYSIZMI?" data-ru="ХОТИТЕ?" data-en="INTERESTED?">ISTAYSIZMI?</span>
+                </h1>
+                <p data-uz="Professional matematik o'qituvchilar bilan birga yuqori natijalar uchun kurslarga qo'shiling!" 
+                   data-ru="Присоединяйтесь к курсам для высоких результатов с профессиональными преподавателями математики!" 
+                   data-en="Join courses for high results with professional math teachers!">
+                   Professional matematik o'qituvchilar bilan birga yuqori natijalar uchun kurslarga qo'shiling!
+                </p>
+                <a href="#form" class="cta-button" data-uz="Ro'yhatdan o'tish" data-ru="Записаться" data-en="Register Now">Ro'yhatdan o'tish</a>
+            </div>
+        </section>
+
+        <!-- Banner Section -->
+        <section class="banners">
+            <div class="container">
+                <div class="banner-slider">
+                    <!-- Banner 1 -->
+                    <div class="banner banner1 active">
+                        <div class="banner-content">
+                            <h2 data-uz="Tajribali Ustozlar" data-ru="Опытные Преподаватели" data-en="Experienced Teachers">Tajribali Ustozlar</h2>
+                            <p data-uz="10 yildan ortiq tajribaga ega professional matematik o'qituvchilar sizni yuqori natijalarga olib boradi. Har bir talaba uchun individual yondashuv va zamonaviy o'qitish metodlari." 
+                               data-ru="Профессиональные преподаватели математики с более чем 10-летним опытом приведут вас к высоким результатам. Индивидуальный подход к каждому студенту и современные методы обучения." 
+                               data-en="Professional math teachers with over 10 years of experience will lead you to high results. Individual approach to each student and modern teaching methods.">
+                               10 yildan ortiq tajribaga ega professional matematik o'qituvchilar sizni yuqori natijalarga olib boradi. Har bir talaba uchun individual yondashuv va zamonaviy o'qitish metodlari.
+                            </p>
+                        </div>
+                        <div class="banner-image">
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Teachers">
+                        </div>
+                    </div>
+
+                    <!-- Banner 2 -->
+                    <div class="banner banner2">
+                        <div class="banner-content">
+                            <h2 data-uz="Yuqori Natijalar" data-ru="Высокие Результаты" data-en="High Results">Yuqori Natijalar</h2>
+                            <p data-uz="Bizning o'quvchilarimiz DTM, olimpiada va xalqaro imtihonlarda ajoyib natijalar qo'lga kiritmoqda. 95% o'quvchilar o'z maqsadlariga erishadi va kutilganidan yuqori ball oladilar." 
+                               data-ru="Наши студенты достигают отличных результатов на ГТТ, олимпиадах и международных экзаменах. 95% студентов достигают своих целей и получают баллы выше ожидаемых." 
+                               data-en="Our students achieve excellent results in state tests, olympiads and international exams. 95% of students achieve their goals and score higher than expected.">
+                               Bizning o'quvchilarimiz DTM, olimpiada va xalqaro imtihonlarda ajoyib natijalar qo'lga kiritmoqda. 95% o'quvchilar o'z maqsadlariga erishadi va kutilganidan yuqori ball oladilar.
+                            </p>
+                        </div>
+                        <div class="banner-image">
+                            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Results">
+                        </div>
+                    </div>
+
+                    <!-- Banner 3 -->
+                    <div class="banner banner3">
+                        <div class="banner-content">
+                            <h2 data-uz="Innovatsion O'qitish" data-ru="Инновационное Обучение" data-en="Innovative Teaching">Innovatsion O'qitish</h2>
+                            <p data-uz="Zamonaviy texnologiyalar, interaktiv darslar va amaliy mashg'ulotlar orqali matematikani oson va qiziqarli o'rganasiz. Virtual laboratoriya va online platformalar yordamida bilimlaringizni mustahkamlang." 
+                               data-ru="Изучайте математику легко и интересно через современные технологии, интерактивные уроки и практические занятия. Укрепляйте свои знания с помощью виртуальной лаборатории и онлайн-платформ." 
+                               data-en="Learn mathematics easily and interestingly through modern technologies, interactive lessons and practical classes. Strengthen your knowledge with virtual laboratory and online platforms.">
+                               Zamonaviy texnologiyalar, interaktiv darslar va amaliy mashg'ulotlar orqali matematikani oson va qiziqarli o'rganasiz. Virtual laboratoriya va online platformalar yordamida bilimlaringizni mustahkamlang.
+                            </p>
+                        </div>
+                        <div class="banner-image">
+                            <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Innovation">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="banner-nav">
+                    <div class="nav-dot active" onclick="showBanner(0)"></div>
+                    <div class="nav-dot" onclick="showBanner(1)"></div>
+                    <div class="nav-dot" onclick="showBanner(2)"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Form Section -->
+        <section class="form-section" id="form">
+            <div class="form-container">
+                <h2 data-uz="Bepul Darsda Ishtirok Eting!" data-ru="Участвуйте в Бесплатном Уроке!" data-en="Join Free Lesson!">Bepul Darsda Ishtirok Eting!</h2>
+                <p class="form-subtitle" data-uz="Bepul darsda ishtirok etish imkonini beruvchi vaucherni olish uchun ro'yxatdan o'ting" 
+                   data-ru="Зарегистрируйтесь, чтобы получить ваучер для участия в бесплатном уроке" 
+                   data-en="Register to get a voucher for participating in a free lesson">
+                   Bepul darsda ishtirok etish imkonini beruvchi vaucherni olish uchun ro'yxatdan o'ting
+                </p>
+                
+                <form id="registrationForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="nameInput" placeholder="Ismingiz" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="tel" class="form-input" id="phoneInput" placeholder="Telefon raqamingiz" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="number" class="form-input" id="ageInput" placeholder="Yoshingiz" min="10" max="25" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span data-uz="Vaucherni Olish" data-ru="Получить Ваучер" data-en="Get Voucher">Vaucherni Olish</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Thank You Page -->
+    <div class="thank-you-page" id="thankYouPage">
+        <div class="thank-you-content">
+            <h1 data-uz="Bepul Dars Uchun Vaucheringiz" data-ru="Ваш Ваучер на Бесплатный Урок" data-en="Your Free Lesson Voucher">Bepul Dars Uchun Vaucheringiz</h1>
+            
+            <div class="voucher">
+                <h3 data-uz="🎓 MATEMATIK KURSLAR VAUCHERI 🎓" data-ru="🎓 ВАУЧЕР МАТЕМАТИЧЕСКИХ КУРСОВ 🎓" data-en="🎓 MATHEMATICS COURSES VOUCHER 🎓">🎓 MATEMATIK KURSLAR VAUCHERI 🎓</h3>
+                <div class="voucher-code" id="voucherCode">MATH2024-001</div>
+                <p data-uz="Ushbu voucher bilan bepul darsda ishtirok etishingiz mumkin!" 
+                   data-ru="С этим ваучером вы можете участвовать в бесплатном уроке!" 
+                   data-en="With this voucher you can participate in a free lesson!">
+                   Ushbu voucher bilan bepul darsda ishtirok etishingiz mumkin!
+                </p>
+            </div>
+
+            <h3 data-uz="Oxirgi Qadam Qoldi!" data-ru="Остался Последний Шаг!" data-en="One Last Step!">Oxirgi Qadam Qoldi!</h3>
+            <p data-uz="Bizni kuzatib borish uchun Telegram kanalimizga obuna bo'ling" 
+               data-ru="Подпишитесь на наш Telegram канал, чтобы следить за нами" 
+               data-en="Subscribe to our Telegram channel to follow us">
+               Bizni kuzatib borish uchun Telegram kanalimizga obuna bo'ling
+            </p>
+            
+            <a href="https://t.me/mathcenter_uz" class="telegram-btn" target="_blank">
+                <span data-uz="📱 Kanalga Qo'shilish" data-ru="📱 Присоединиться к Каналу" data-en="📱 Join Channel">📱 Kanalga Qo'shilish</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'uz';
+        let currentBanner = 0;
+        const totalBanners = 3;
+
+        // Language Toggle
+        function toggleLanguage() {
+            const languages = ['uz', 'ru', 'en'];
+            const flags = ['🇺🇿', '🇷🇺', '🇺🇸'];
+            const names = ['O\'zbek', 'Русский', 'English'];
+            
+            const currentIndex = languages.indexOf(currentLang);
+            const nextIndex = (currentIndex + 1) % languages.length;
+            currentLang = languages[nextIndex];
+            
+            document.getElementById('langFlag').textContent = flags[nextIndex];
+            document.getElementById('langText').textContent = names[nextIndex];
+            
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const elements = document.querySelectorAll('[data-uz]');
+            elements.forEach(element => {
+                const text = element.getAttribute(`data-${currentLang}`);
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+            updateFormPlaceholders();
+        }
+
+        function updateFormPlaceholders() {
+            const nameInput = document.getElementById('nameInput');
+            const phoneInput = document.getElementById('phoneInput');
+            const ageInput = document.getElementById('ageInput');
+            
+            const placeholders = {
+                uz: {
+                    name: 'Ismingiz',
+                    phone: 'Telefon raqamingiz',
+                    age: 'Yoshingiz'
+                },
+                ru: {
+                    name: 'Ваше имя',
+                    phone: 'Ваш номер телефона',
+                    age: 'Ваш возраст'
+                },
+                en: {
+                    name: 'Your Name',
+                    phone: 'Your Phone Number',
+                    age: 'Your Age'
+                }
+            };
+            
+            nameInput.placeholder = placeholders[currentLang].name;
+            phoneInput.placeholder = placeholders[currentLang].phone;
+            ageInput.placeholder = placeholders[currentLang].age;
+        }
+
+        // Banner Slider
+        function showBanner(index) {
+            const banners = document.querySelectorAll('.banner');
+            const dots = document.querySelectorAll('.nav-dot');
+            
+            banners.forEach(banner => banner.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            banners[index].classList.add('active');
+            dots[index].classList.add('active');
+            
+            currentBanner = index;
+        }
+
+        // Auto-slide banners
+        setInterval(() => {
+            currentBanner = (currentBanner + 1) % totalBanners;
+            showBanner(currentBanner);
+        }, 5000);
+
+        // Form Submission
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            const nameInput = document.getElementById('nameInput');
+            const phoneInput = document.getElementById('phoneInput');
+            const ageInput = document.getElementById('ageInput');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            const studentData = {
+                name: nameInput.value,
+                phone: phoneInput.value,
+                age: ageInput.value,
+                course: 'Mathematics'
+            };
+
+            const originalText = submitBtn.innerHTML;
+            const loadingTexts = {
+                uz: '⏳ Yuborilmoqda...',
+                ru: '⏳ Отправляется...',
+                en: '⏳ Sending...'
+            };
+            const successTexts = {
+                uz: '✅ Yuborildi!',
+                ru: '✅ Отправлено!',
+                en: '✅ Sent!'
+            };
+            const errorTexts = {
+                uz: '❌ Xatolik!',
+                ru: '❌ Ошибка!',
+                en: '❌ Error!'
+            };
+
+            submitBtn.innerHTML = loadingTexts[currentLang];
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/.netlify/functions/sendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(studentData),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server error');
+                }
+
+                submitBtn.innerHTML = successTexts[currentLang];
+                
+                // Generate unique voucher code
+                const voucherCode = `MATH2024-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+                document.getElementById('voucherCode').textContent = voucherCode;
+
+                setTimeout(() => {
+                    // Show thank you page
+                    document.getElementById('mainContent').style.display = 'none';
+                    document.getElementById('thankYouPage').style.display = 'block';
+                    window.scrollTo(0, 0);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error:', error);
+                submitBtn.innerHTML = errorTexts[currentLang];
+                
+                setTimeout(() => {
+                    const alertMessages = {
+                        uz: 'Yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.',
+                        ru: 'Произошла ошибка при отправке. Пожалуйста, попробуйте снова.',
+                        en: 'An error occurred while sending. Please try again.'
+                    };
+                    alert(alertMessages[currentLang]);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            }
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Form input animations
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+                this.parentElement.style.transition = 'all 0.3s ease';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.style.borderColor = '#4CAF50';
+                } else {
+                    this.style.borderColor = '#e8e8e8';
+                }
+            });
+        });
+
+        // Initialize page
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+
+        // Parallax effect for floating particles
+        window.addEventListener('scroll', () => {
+            const particles = document.querySelectorAll('.particle');
+            const scrollY = window.scrollY;
+            
+            particles.forEach((particle, index) => {
+                const speed = (index + 1) * 0.2;
+                particle.style.transform += ` translateY(${scrollY * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

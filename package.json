@@ -1,0 +1,29 @@
+{
+  "name": "mathcenter-website",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Build complete'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/mathcenter.git"
+  },
+  "keywords": [
+    "mathematics",
+    "education",
+    "courses",
+    "uzbekistan"
+  ],
+  "author": "MathCenter",
+  "license": "MIT",
+  "description": "Professional matematik kurslari uchun veb-sayt",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
