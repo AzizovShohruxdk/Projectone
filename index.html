@@ -2,9 +2,39 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- make layout scale on mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>MathCenter - Matematik Kurslar Markazi</title>
     <style>
+        /* Responsive baseline */
+        *,*::before,*::after{box-sizing:border-box}
+        html{overflow-x:hidden;-webkit-text-size-adjust:100%}
+        body{margin:0;line-height:1.5;overflow-x:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+        img,video,canvas,svg{max-width:100%;height:auto;display:block}
+        a{color:inherit;text-decoration:none}
+        button,input,select,textarea{font:inherit}
+        :where(h1,h2,h3,h4,h5,h6){line-height:1.15;margin:0 0 .6rem}
+
+        /* Container helper */
+        .container{width:min(100% - 2rem,1200px);margin-inline:auto}
+
+        /* Nav wraps on small screens */
+        header, nav{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+        .spacer{flex:1 1 auto}
+
+        /* Typography scales */
+        .hero-title{font-weight:800;font-size:clamp(28px,6vw,64px)}
+        .hero-subtitle{font-size:clamp(14px,2.5vw,20px)}
+
+        /* Buttons */
+        .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1rem;border-radius:14px;white-space:nowrap}
+        .btn.wide{width:100%;justify-content:center}
+
+        /* Layout helpers */
+        .row{display:flex;flex-wrap:wrap;gap:1rem}
+        .col{flex:1 1 300px;min-width:0}
+        section,div{max-width:100%} /* prevent overflow from fixed-width blocks */
+
         * {
             margin: 0;
             padding: 0;
@@ -18,51 +48,52 @@
             color: #333;
         }
 
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            animation: pulse 2s infinite;
-        }
+.logo-img {
+    height: 40px;  /* базовый размер логотипа */
+    width: auto;
+}
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+.logo-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
 
-        .logo-text {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
+/* Адаптив */
+@media (max-width: 768px) {
+    .header { padding: 10px 15px; }
+    .logo-img { height: 30px; }
+    .logo-text { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+    .logo-img { height: 26px; }
+    .logo-text { font-size: 14px; }
+}
+
+
 
         .language-selector {
             background: rgba(102, 126, 234, 0.1);
@@ -478,6 +509,60 @@
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
         }
+
+        /* Improved hamburger */
+        .hamburger{
+          display:none; position:relative; width:44px; height:44px; padding:0;
+          border:1px solid rgba(102,126,234,.18); background:#fff; border-radius:12px;
+          align-items:center; justify-content:center; cursor:pointer;
+          transition:background .2s ease, box-shadow .2s ease, border-color .2s ease;
+        }
+        .hamburger:hover{ background:rgba(102,126,234,.06); box-shadow:0 2px 8px rgba(0,0,0,.06) }
+        .hamburger span{
+          position:absolute; left:50%; width:22px; height:2px; border-radius:2px;
+          background:#4f46e5; transform:translateX(-50%); transition:top .25s ease, transform .25s ease, opacity .2s ease;
+        }
+        .hamburger span:nth-child(1){ top:14px; }
+        .hamburger span:nth-child(2){ top:21px; }
+        .hamburger span:nth-child(3){ top:28px; }
+        .header.open .hamburger span:nth-child(1){ top:21px; transform:translateX(-50%) rotate(45deg); }
+        .header.open .hamburger span:nth-child(2){ opacity:0; }
+        .header.open .hamburger span:nth-child(3){ top:21px; transform:translateX(-50%) rotate(-45deg); }
+
+        /* Mobile nav panel */
+        @media (max-width:768px){
+          .nav-links{ display:none !important; }
+          .hamburger{ display:flex; }
+          .header.open .nav-links{
+            display:flex !important; position:absolute; top:100%; left:0; right:0; z-index:1001;
+            background:#fff; flex-direction:column; gap:14px; padding:16px 20px 22px;
+            border-bottom-left-radius:16px; border-bottom-right-radius:16px;
+            box-shadow:0 16px 30px rgba(0,0,0,0.08); animation:menuDrop .26s ease both;
+          }
+          .header.open .nav-links a{
+            display:block; text-align:center; padding:12px 10px; border-radius:12px;
+          }
+          .header.open .nav-links a:hover{ background:#f5f7ff }
+        }
+        @keyframes menuDrop{ from{ opacity:0; transform:translateY(-8px) } to{ opacity:1; transform:translateY(0) } }
+
+        /* Overlay (fixed, без blur, ниже header) */
+        .menu-overlay{
+          position:fixed;
+          inset:0;
+          background:rgba(0,0,0,.26);   /* полупрозрачное затемнение */
+          /* backdrop-filter:blur(1px);  <-- удалить */
+          z-index:999;                  /* header = 1000, меню = 1001 */
+          opacity:0;
+          transition:opacity .25s ease;
+          pointer-events:none;
+        }
+        .menu-overlay.show{
+          opacity:1;
+          pointer-events:auto;
+        }
+
+        /* ...existing code... */
     </style>
 </head>
 <body>
@@ -487,127 +572,48 @@
         <div class="particle" style="width: 40px; height: 40px; top: 80%; left: 20%; animation-delay: 4s;"></div>
     </div>
 
-    <header style="display:flex; justify-content:space-between; align-items:center; padding:15px 30px; background:white; box-shadow:0 2px 10px rgba(0,0,0,0.05); position:relative;">
-
-        <!-- Лого -->
-        <div class="logo" style="font-weight:700; font-size:1.3em; color:#333;">
-          Matematikachun
-        </div>
-      
-        <!-- Навигация -->
-        <nav class="nav-links">
-          <a href="#hero" data-uz="Bosh sahifa" data-ru="Главная" data-en="Home">Bosh sahifa</a>
-          <a href="#courses" data-uz="Kurslar" data-ru="Курсы" data-en="Courses">Kurslar</a>
-          <a href="#form" class="register-btn" data-uz="Ro'yxatdan o'tish" data-ru="Регистрация" data-en="Register">Ro'yxatdan o'tish</a>
-        </nav>
-      
-        <!-- Переключатель языка -->
-        <div class="language-selector" onclick="toggleLanguage()">
-          <span id="langFlag">🇺🇿</span>
-          <span id="langText">O'zbek</span>
-          <span style="font-size:0.8em;">▼</span>
-        </div>
-      
-        <!-- Гамбургер -->
-        <div class="hamburger" onclick="toggleMenu()">
-          ☰
-        </div>
-      </header>
-      
-      <style>
-        /* Базовые стили */
-        .nav-links {
-          display:flex;
-          gap:30px;
-          align-items:center;
-        }
-      
-        .nav-links a {
-          text-decoration:none;
-          color:#333;
-          font-weight:500;
-          transition:0.3s;
-        }
-      
-        .nav-links a:hover {
-          color:#667eea;
-        }
-      
-        .register-btn {
-          font-weight:600;
-          background:linear-gradient(45deg,#667eea,#764ba2);
-          padding:10px 20px;
-          border-radius:25px;
-          color:white !important;
-          box-shadow:0 4px 10px rgba(0,0,0,0.1);
-          transition:0.3s;
-        }
-      
-        .register-btn:hover {
-          opacity:0.85;
-        }
-      
-        .language-selector {
-          cursor:pointer;
-          font-size:0.95em;
-          display:flex;
-          align-items:center;
-          gap:5px;
-          margin-left:20px;
-        }
-      
-        /* Гамбургер */
-        .hamburger {
-          display:none;
-          font-size:1.5em;
-          cursor:pointer;
-          margin-left:15px;
-        }
-      
-        /* Мобильная версия */
-        @media (max-width: 768px) {
-          .nav-links {
-            display:none;
-            flex-direction:column;
-            gap:20px;
-            position:absolute;
-            top:70px;
-            right:20px;
-            background:white;
-            padding:20px;
-            border-radius:12px;
-            box-shadow:0 8px 20px rgba(0,0,0,0.1);
-            width:200px;
-          }
-      
-          .nav-links.active {
-            display:flex;
-          }
-      
-          .hamburger {
-            display:block;
-          }
-      
-          .language-selector {
-            font-size:0.85em;
-          }
-        }
-      </style>
-      
-      <script>
-        function toggleMenu() {
-          document.querySelector('.nav-links').classList.toggle('active');
-        }
-      
-        function toggleLanguage() {
-          // тут можно сделать переключение языка
-          alert("Скоро здесь будет переключение языка!");
-        }
-      </script>
-      
+<!-- Header / Navbar -->
+<header class="header" style="
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    padding:15px 40px; 
+    background:white; 
+    box-shadow:0 2px 10px rgba(0,0,0,0.08); 
+    position:sticky; 
+    top:0; 
+    z-index:1000;
+">
+<div class="logo" style="display:flex; align-items:center;">
+    <img src="images/logo.png" alt="EduCenter" class="logo-img" style="height:40px; width:auto;">
+  </div>
+  
   
 
-    <!-- Main Content -->
+  <!-- add id for mobile control -->
+  <nav id="mobileNav" class="nav-links" style="display:flex; gap:30px; font-size:1em; align-items:center;">
+    <a href="#hero" style="text-decoration:none; color:#333; font-weight:500; transition:0.3s;"
+       onmouseover="this.style.color='#667eea'" onmouseout="this.style.color='#333'"
+       data-uz="Bosh sahifa" data-ru="Главная" data-en="Home">Bosh sahifa</a>
+    <a href="#courses" style="text-decoration:none; color:#333; font-weight:500; transition:0.3s;"
+       onmouseover="this.style.color='#667eea'" onmouseout="this.style.color='#333'"
+       data-uz="Kurslar" data-ru="Курсы" data-en="Courses">Kurslar</a>
+    <a href="#form" style="text-decoration:none; font-weight:600; background:linear-gradient(45deg,#667eea,#764ba2); padding:10px 20px; border-radius:25px; color:white; box-shadow:0 4px 10px rgba(0,0,0,0.1); transition:0.3s;"
+       onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"
+       data-uz="Ro'yxatdan o'tish" data-ru="Регистрация" data-en="Register">Ro'yxatdan o'tish</a>
+  </nav>
+
+  <!-- Hamburger button (shown on mobile) -->
+  <button id="hamburgerBtn" class="hamburger" aria-label="Menu" aria-controls="mobileNav" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="language-selector" onclick="toggleLanguage()" style="cursor:pointer; font-size:0.95em; display:flex; align-items:center; gap:5px;">
+    <span id="langFlag">🇺🇿</span><span id="langText">O'zbek</span><span style="font-size:0.8em;">▼</span>
+  </div>
+</header>
+<div id="menuOverlay" class="menu-overlay"></div>
+<!-- Main Content -->
     <div id="mainContent">
         <!-- Hero Section -->
         <section class="hero" id="hero">
@@ -700,8 +706,7 @@
 
     </section>   <!-- конец Hero -->
 
-    <!-- ВСТАВИТЬ ТУТ -->
-<!-- Courses Section -->
+   <!-- Courses Section -->
 <section class="courses" id="courses" style="padding:80px 20px; background:#f9f9f9; text-align:center;">
     <div class="container" style="max-width:1200px; margin:0 auto;">
       <h2 style="font-size:2.5em; margin-bottom:50px; color:#333;"
@@ -711,91 +716,117 @@
           Bizning kurslar
       </h2>
   
-      <div class="course-list" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:30px;">
-        
-        <!-- Matematika -->
-        <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-          <h3 style="font-size:1.5em; margin-bottom:15px; color:#667eea;"
-              data-uz="Matematika" 
-              data-ru="Математика" 
-              data-en="Mathematics">Matematika</h3>
-          <p style="margin-bottom:20px; color:#555;"
-              data-uz="Bolalar uchun kuchli matematika kurslari" 
-              data-ru="Сильные курсы математики для детей" 
-              data-en="Strong math courses for children">
-              Bolalar uchun kuchli matematika kurslari
-          </p>
-          <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#667eea,#764ba2); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;"
-              data-uz="Batafsil" 
-              data-ru="Подробнее" 
-              data-en="More">
-              Batafsil
-          </a>
+      <!-- Swiper -->
+      <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+  
+          <!-- Matematika -->
+          <div class="swiper-slide">
+            <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+              <h3 style="font-size:1.5em; margin-bottom:15px; color:#667eea;"
+                  data-uz="Matematika" data-ru="Математика" data-en="Mathematics">Matematika</h3>
+              <p style="margin-bottom:20px; color:#555;"
+                  data-uz="Bolalar uchun kuchli matematika kurslari"
+                  data-ru="Сильные курсы математики для детей"
+                  data-en="Strong math courses for children">
+                  Bolalar uchun kuchli matematika kurslari
+              </p>
+              <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#667eea,#764ba2); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;"
+                  data-uz="Batafsil" data-ru="Подробнее" data-en="More">Batafsil</a>
+            </div>
+          </div>
+  
+          <!-- Ingliz tili -->
+          <div class="swiper-slide">
+            <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+              <h3 style="font-size:1.5em; margin-bottom:15px; color:#ff6b6b;"
+                  data-uz="Ingliz tili" data-ru="Английский язык" data-en="English">Ingliz tili</h3>
+              <p style="margin-bottom:20px; color:#555;"
+                  data-uz="Speaking va Grammar kurslari"
+                  data-ru="Курсы Speaking и Grammar"
+                  data-en="Speaking and Grammar courses">
+                  Speaking va Grammar kurslari
+              </p>
+              <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#ff6b6b,#ffd93d); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;"
+                  data-uz="Batafsil" data-ru="Подробнее" data-en="More">Batafsil</a>
+            </div>
+          </div>
+  
+          <!-- IELTS -->
+          <div class="swiper-slide">
+            <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+              <h3 style="font-size:1.5em; margin-bottom:15px; color:#3f51b5;">IELTS</h3>
+              <p style="margin-bottom:20px; color:#555;">IELTS ga tayyorgarlik kurslari</p>
+              <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#3f51b5,#2196f3); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;">Batafsil</a>
+            </div>
+          </div>
+  
+          <!-- Rus tili -->
+          <div class="swiper-slide">
+            <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+              <h3 style="font-size:1.5em; margin-bottom:15px; color:#4caf50;"
+                  data-uz="Rus tili" data-ru="Русский язык" data-en="Russian">Rus tili</h3>
+              <p style="margin-bottom:20px; color:#555;"
+                  data-uz="Oson va tezkor usullar bilan rus tili"
+                  data-ru="Русский язык простыми и быстрыми методами"
+                  data-en="Russian language with easy and fast methods">
+                  Oson va tezkor usullar bilan rus tili
+              </p>
+              <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#4caf50,#81c784); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;">Batafsil</a>
+            </div>
+          </div>
+  
+          <!-- Arab tili -->
+          <div class="swiper-slide">
+            <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+              <h3 style="font-size:1.5em; margin-bottom:15px; color:#009688;">Arab tili</h3>
+              <p style="margin-bottom:20px; color:#555;">Arab tili o‘quv kurslari</p>
+              <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#009688,#4db6ac); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;">Batafsil</a>
+            </div>
+          </div>
+  
+          <!-- Pochemuchka -->
+          <div class="swiper-slide">
+            <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+              <h3 style="font-size:1.5em; margin-bottom:15px; color:#ff9800;"
+                  data-uz="Pochemuchka" data-ru="Почемучка" data-en="Pre-School">Pochemuchka</h3>
+              <p style="margin-bottom:20px; color:#555;"
+                  data-uz="Maktabga tayyorlov kurslari"
+                  data-ru="Подготовительные курсы к школе"
+                  data-en="Preparatory courses for school">
+                  Maktabga tayyorlov kurslari
+              </p>
+              <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#ff9800,#ffc107); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;">Batafsil</a>
+            </div>
+          </div>
+  
         </div>
   
-        <!-- Ingliz tili -->
-        <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-          <h3 style="font-size:1.5em; margin-bottom:15px; color:#ff6b6b;"
-              data-uz="Ingliz tili" 
-              data-ru="Английский язык" 
-              data-en="English">Ingliz tili</h3>
-          <p style="margin-bottom:20px; color:#555;"
-              data-uz="Speaking va Grammar kurslari" 
-              data-ru="Курсы Speaking и Grammar" 
-              data-en="Speaking and Grammar courses">
-              Speaking va Grammar kurslari
-          </p>
-          <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#ff6b6b,#ffd93d); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;"
-              data-uz="Batafsil" 
-              data-ru="Подробнее" 
-              data-en="More">
-              Batafsil
-          </a>
-        </div>
-  
-        <!-- Rus tili -->
-        <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-          <h3 style="font-size:1.5em; margin-bottom:15px; color:#4caf50;"
-              data-uz="Rus tili" 
-              data-ru="Русский язык" 
-              data-en="Russian">Rus tili</h3>
-          <p style="margin-bottom:20px; color:#555;"
-              data-uz="Oson va tezkor usullar bilan rus tili" 
-              data-ru="Русский язык простыми и быстрыми методами" 
-              data-en="Russian language with easy and fast methods">
-              Oson va tezkor usullar bilan rus tili
-          </p>
-          <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#4caf50,#81c784); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;"
-              data-uz="Batafsil" 
-              data-ru="Подробнее" 
-              data-en="More">
-              Batafsil
-          </a>
-        </div>
-  
-        <!-- Pochemuchka -->
-        <div class="course-card" style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-          <h3 style="font-size:1.5em; margin-bottom:15px; color:#ff9800;"
-              data-uz="Pochemuchka" 
-              data-ru="Почемучка" 
-              data-en="Pre-School">Pochemuchka</h3>
-          <p style="margin-bottom:20px; color:#555;"
-              data-uz="Maktabga tayyorlov kurslari" 
-              data-ru="Подготовительные курсы к школе" 
-              data-en="Preparatory courses for school">
-              Maktabga tayyorlov kurslari
-          </p>
-          <a href="#form" style="display:inline-block; background:linear-gradient(45deg,#ff9800,#ffc107); color:white; padding:10px 25px; border-radius:25px; text-decoration:none;"
-              data-uz="Batafsil" 
-              data-ru="Подробнее" 
-              data-en="More">
-              Batafsil
-          </a>
-        </div>
-  
+        <!-- Навигация -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
       </div>
     </div>
   </section>
+  
+  <!-- Swiper JS -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+    new Swiper(".mySwiper", {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      loop: true,
+      pagination: { el: ".swiper-pagination", clickable: true },
+      navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+      breakpoints: {
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 }
+      }
+    });
+  </script>
+  
   
 
   
@@ -834,15 +865,17 @@
   
         <!-- 🔽 Новое поле выбора курса -->
         <div class="form-group">
-          <select id="courseSelect" class="form-input" required>
-            <option value="" disabled selected>
-              Kursni tanlang
-            </option>
-            <option value="Matematika">📘 Matematika</option>
-            <option value="Ingliz tili">🇬🇧 Ingliz tili</option>
-            <option value="Rus tili">🇷🇺 Rus tili</option>
-            <option value="Pochemuchka">🎒 Pochemuchka</option>
-          </select>
+            <select id="courseSelect" class="form-input" required>
+                <option value="" disabled selected>
+                  Kursni tanlang
+                </option>
+                <option value="Matematika">Matematika</option>
+                <option value="Ingliz tili">Ingliz tili</option>
+                <option value="IELTS">IELTS</option>
+                <option value="Rus tili">Rus tili</option>
+                <option value="Arab tili">Arab tili</option>
+                <option value="Pochemuchka">Pochemuchka</option>
+              </select>
         </div>
   
         <button type="submit" class="submit-btn" id="submitBtn">
@@ -1021,11 +1054,14 @@
     try {
         // 🔑 Префиксы для разных курсов
         const prefixes = {
-            Matematika: "MATH",
-            "Ingliz tili": "ENG",
-            "Rus tili": "RUS",
-            Pochemuchka: "POCH"
-        };
+    Matematika: "MATH",
+    "Ingliz tili": "ENG",
+    IELTS: "IELTS",
+    "Rus tili": "RUS",
+    "Arab tili": "ARAB",
+    Pochemuchka: "POCH"
+};
+
 
         const prefix = prefixes[studentData.course] || "COURSE";
         const voucher = `${prefix}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -1125,6 +1161,34 @@
                 particle.style.transform += ` translateY(${scrollY * speed}px)`;
             });
         });
+
+        // Hamburger toggle (refined)
+        const headerEl = document.querySelector('header.header');
+        const burgerBtn = document.getElementById('hamburgerBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const overlay = document.getElementById('menuOverlay');
+
+        function openMenu(){
+          headerEl.classList.add('open');
+          burgerBtn.setAttribute('aria-expanded','true');
+          overlay.classList.add('show');
+          document.body.style.overflow = 'hidden';
+        }
+        function closeMenu(){
+          headerEl.classList.remove('open');
+          burgerBtn.setAttribute('aria-expanded','false');
+          overlay.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+        function toggleMenu(e){
+          e?.stopPropagation();
+          headerEl.classList.contains('open') ? closeMenu() : openMenu();
+        }
+
+        burgerBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', closeMenu);
+        mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
     </script>
 </body>
 </html>
