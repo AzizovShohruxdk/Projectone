@@ -1016,100 +1016,111 @@
         }, 5000);
 
         async function handleSubmit(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    const nameInput = document.getElementById('nameInput');
-    const phoneInput = document.getElementById('phoneInput');
-    const ageInput = document.getElementById('ageInput');
-    const courseSelect = document.getElementById('courseSelect');
-    const submitBtn = document.getElementById('submitBtn');
+  const nameInput = document.getElementById('nameInput');
+  const phoneInput = document.getElementById('phoneInput');
+  const ageInput = document.getElementById('ageInput');
+  const courseSelect = document.getElementById('courseSelect');
+  const submitBtn = document.getElementById('submitBtn');
 
-    const studentData = {
-        name: nameInput.value,
-        phone: phoneInput.value,
-        age: ageInput.value,
-        course: courseSelect.value
+  const studentData = {
+    name: nameInput.value,
+    phone: phoneInput.value,
+    age: ageInput.value,
+    course: courseSelect.value
+  };
+
+  const originalText = submitBtn.innerHTML;
+  const loadingTexts = {
+    uz: '⏳ Yuborilmoqda...',
+    ru: '⏳ Отправляется...',
+    en: '⏳ Sending...'
+  };
+  const successTexts = {
+    uz: '✅ Yuborildi!',
+    ru: '✅ Отправлено!',
+    en: '✅ Sent!'
+  };
+  const errorTexts = {
+    uz: '❌ Xatolik!',
+    ru: '❌ Ошибка!',
+    en: '❌ Error!'
+  };
+
+  submitBtn.innerHTML = loadingTexts[currentLang];
+  submitBtn.disabled = true;
+
+  try {
+    // 🔑 Префиксы для разных курсов
+    const prefixes = {
+      Matematika: "MATH",
+      "Ingliz tili": "ENG",
+      IELTS: "IELTS",
+      "Rus tili": "RUS",
+      "Arab tili": "ARAB",
+      Pochemuchka: "POCH"
     };
 
-    const originalText = submitBtn.innerHTML;
-    const loadingTexts = {
-        uz: '⏳ Yuborilmoqda...',
-        ru: '⏳ Отправляется...',
-        en: '⏳ Sending...'
-    };
-    const successTexts = {
-        uz: '✅ Yuborildi!',
-        ru: '✅ Отправлено!',
-        en: '✅ Sent!'
-    };
-    const errorTexts = {
-        uz: '❌ Xatolik!',
-        ru: '❌ Ошибка!',
-        en: '❌ Error!'
-    };
+    const prefix = prefixes[studentData.course] || "COURSE";
+    const voucher = `${prefix}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    submitBtn.innerHTML = loadingTexts[currentLang];
-    submitBtn.disabled = true;
+    // ⚡ Отправка в Telegram
+    const botToken = "6572748886:AAHKfPLISqjjd1V7J4jHhHxKWBOQekBwG0M";
+    const chatIds = [
+  "334244718",   // пользователь 1
+  "330174",      // пользователь 2
+  "794395249",   // пользователь 3
+  "6608036022"   // пользователь 4
+];
 
-    try {
-        // 🔑 Префиксы для разных курсов
-        const prefixes = {
-    Matematika: "MATH",
-    "Ingliz tili": "ENG",
-    IELTS: "IELTS",
-    "Rus tili": "RUS",
-    "Arab tili": "ARAB",
-    Pochemuchka: "POCH"
-};
+    const messageText = `📝 Yangi ariza!\n\n👤 Ism: ${studentData.name}\n📞 Telefon: ${studentData.phone}\n🎂 Yosh: ${studentData.age}\n📘 Kurs: ${studentData.course}\n🎟 Voucher: ${voucher}`;
 
-
-        const prefix = prefixes[studentData.course] || "COURSE";
-        const voucher = `${prefix}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-
-        // ⚡ Отправка в Telegram
-        const botToken = "6572748886:AAHKfPLISqjjd1V7J4jHhHxKWBOQekBwG0M";
-        const chatId = "334244718";
-
-        const messageText = `📝 Yangi ariza!\n\n👤 Ism: ${studentData.name}\n📞 Telefon: ${studentData.phone}\n🎂 Yosh: ${studentData.age}\n📘 Kurs: ${studentData.course}\n🎟 Voucher: ${voucher}`;
-
+    // Отправляем сообщение каждому пользователю
+    for (const chatId of chatIds) {
+      try {
         const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: messageText,
-                parse_mode: "HTML"
-            })
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: messageText,
+            parse_mode: "HTML"
+          })
         });
 
         if (!response.ok) {
-            throw new Error("Server error");
+          console.error(`Ошибка при отправке в chatId ${chatId}`);
         }
-
-        submitBtn.innerHTML = successTexts[currentLang];
-
-        // ✅ Показываем ваучер
-        document.getElementById('voucherCode').textContent = voucher;
-
-        // ⛔ Скрываем форму и показываем thank-you блок
-        document.getElementById('form').style.display = 'none';
-        document.getElementById('thankYouPage').style.display = 'block';
-
-    } catch (error) {
-        console.error("Error:", error);
-        submitBtn.innerHTML = errorTexts[currentLang];
-
-        setTimeout(() => {
-            const alertMessages = {
-                uz: "Yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
-                ru: "Произошла ошибка при отправке. Пожалуйста, попробуйте снова.",
-                en: "An error occurred while sending. Please try again."
-            };
-            alert(alertMessages[currentLang]);
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }, 2000);
+      } catch (err) {
+        console.error(`Ошибка сети при отправке в chatId ${chatId}:`, err);
+      }
     }
+
+    submitBtn.innerHTML = successTexts[currentLang];
+
+    // ✅ Показываем ваучер
+    document.getElementById('voucherCode').textContent = voucher;
+
+    // ⛔ Скрываем форму и показываем thank-you блок
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('thankYouPage').style.display = 'block';
+
+  } catch (error) {
+    console.error("Error:", error);
+    submitBtn.innerHTML = errorTexts[currentLang];
+
+    setTimeout(() => {
+      const alertMessages = {
+        uz: "Yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
+        ru: "Произошла ошибка при отправке. Пожалуйста, попробуйте снова.",
+        en: "An error occurred while sending. Please try again."
+      };
+      alert(alertMessages[currentLang]);
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+    }, 2000);
+  }
 }
 
 
